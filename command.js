@@ -30,6 +30,18 @@ const commands = [
             },
         ],
     },
+    {
+        name: 'clicks',
+        description: 'Total clicks on a URL',
+        options: [
+            {
+                name: 'text',
+                type: 3,
+                description: 'The text you want the bot to say',
+                required: true,
+            },
+        ],
+    },
 ];
 
 const rest = new REST({ version: '10' }).setToken(process.env.BOT_TOKEN);

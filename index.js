@@ -1,5 +1,8 @@
-const { Client, GatewayIntentBits } = require('discord.js')
+const { Client, GatewayIntentBits } = require('discord.js');
+const shortUrl = require('./urlShortner/url');
+const totalClick = require('./urlShortner/totalClicks');
 require('dotenv').config()
+
 
 const client = new Client({
     intents: [
@@ -29,7 +32,7 @@ client.on('messageCreate', (message) => {
 
 })
 
-client.on('interactionCreate', (interaction) => {
+client.on('interactionCreate', async (interaction) => {
     try {
         if (!interaction.isCommand()) return;
         if (interaction.commandName === 'ping') {
@@ -46,10 +49,21 @@ client.on('interactionCreate', (interaction) => {
 
         try {
             if (interaction.channel.id === urlShortener) {
-                if (interaction.commandName = 'create') {
+                if (interaction.commandName === 'create') {
                     const create = interaction.options.getString('text');
+
+                    const shortId = await shortUrl(create)
+
                     interaction.reply({
-                        content: `Your short URL: **${create}**`
+                        content: `Your short URL: **https://url-xd46.onrender.com/u/${shortId}**`
+                    })
+                }else if (interaction.commandName === 'clicks') {
+                    const providedUrl = interaction.options.getString('text');
+
+                    const clicks = await totalClick(providedUrl)
+
+                    interaction.reply({
+                        content: `Total Clicks: **${clicks}**`
                     })
                 }
             }
@@ -60,7 +74,7 @@ client.on('interactionCreate', (interaction) => {
         }
     } catch (error) {
         interaction.reply({
-            content: "This command not exist"
+            content: "This command not existtttttt"
         })
     }
 })
